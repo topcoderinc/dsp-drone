@@ -27,33 +27,12 @@ myMAV.on('ready', function() {
     //parse incoming serial data
     port.on('data', function(data) {
         myMAV.parse(data);
-
-console.log('here');
-        myMAV.createMessage("COMMAND_LONG", {
-            'target_system': 1,
-            'target_component': 0,
-            'command': 400,
-            'confirmation': 0,
-            'param1': 1,
-            'param2': 0,
-            'param3': 0,
-            'param4': 0,
-            'param5': 0,
-            'param6': 0,
-            'param7': 0
-        }, function(message){
-            port.write(message.buffer);
-        });
     });
 
     //listen for messages
-    myMAV.on('COMMAND_ACK', function(message, fields) {
+    myMAV.on('GLOBAL_POSITION_INT', function(message, fields) {
         console.log(fields);
     });
-
-
-
-
 });
 
 function close(){
