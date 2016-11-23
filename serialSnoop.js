@@ -26,118 +26,193 @@ var serial2 = {
 };
 
 var abort = false;
+var blessedDisplay;
 
 // Blessed start ------------------------------------------------------------------------------------
-var screen = blessed.screen({
-    smartCSR: true,
-    dockBorders: true,
-    mouseEnable: true,
-    debug: true,
-    cursor: {
-        artificial: true,
-        blink: false,
-        shape: 'block',
-        color: 'red'
-    },
-    log: 'blessed.log',
-    title: 'Serial Snoop'
-});
 
-var outputBox = blessed.box({
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '90%',
-    content: '',
-    border: {
-        type: 'line'
-    }
-});
-var commandBox = blessed.box({
-    top: '80%',
-    left: 0,
-    width: '100%',
-    height: '20%',
-    border: {
-        type: 'line'
-    },
-    scrollable: true,
-    // alwaysScroll: true,
-    mouse: true, // This is what actually makes the mouse scroll work
-    scrollbar: {
-        ch: ' ',
-        track: {
-            bg: 'cyan'
+
+function initBlessed() {
+    var screen = blessed.screen({
+        smartCSR: true,
+        dockBorders: true,
+        mouseEnable: true,
+        debug: true,
+        cursor: {
+            artificial: true,
+            blink: false,
+            shape: 'block',
+            color: 'red'
         },
-        style: {
-            inverse: true
-        }
-    },
-    input: true,
-    focused: true // Keep the focus on this window
-});
-screen.append(outputBox);
-screen.append(commandBox);
-screen.render();
+        log: 'blessed.log',
+        title: 'Serial Snoop'
+    });
 
-var input2 = '';
-function manageInput() {
+    var outputBox = blessed.box({
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '70%+1',
+        content: '',
+        label: 'Viewer',
+        border: {
+            type: 'line'
+        },
+        bg: '#FED480',
+        fg: 'black',
+        scrollable: true,
+        mouse: true, // This is what actually makes the mouse scroll work
+        scrollbar: {
+            ch: ' ',
+            track: {
+                bg: 'grey',
+                fg: '#093145'
+            },
+            style: {
+                inverse: true
+            }
+        },
+        tags: true
+    });
+
+    var commandBox = blessed.box({
+        top: '70%',
+        left: 0,
+        width: '100%',
+        height: 'shrink',
+        border: {
+            type: 'line'
+        },
+        bg: '#3C6478',
+        fg: 'white',
+        label: 'Command',
+        scrollable: true,
+        // alwaysScroll: true,
+        mouse: true, // This is what actually makes the mouse scroll work
+        scrollbar: {
+            ch: ' ',
+            track: {
+                bg: 'grey',
+                fg: '#093145'
+            },
+            style: {
+                inverse: true
+            }
+        },
+        input: true,
+        tags: true,
+        focused: true // Start the focus on this window
+    });
+    screen.append(outputBox);
+    screen.append(commandBox);
+    screen.render();
+
+    outputBox.on('focus', function () { // Keep the focus on the command box
+        commandBox.focus();
+    });
+
+    var inputBuffer = '';
+
+    // var cursorChar = '{blink}✿{/blink}';
+    var cursorChar = '✿';
+    // var cursorChar = '☀'; // ☀
+    var prompt = function () {
+        print('> ' + cursorChar);
+    };
+
+    var processCommand = function (inputLine) {
+        if (inputLine == '') { // If it's empty, skip it
+            return;
+        }
+        if ((inputLine == 'l1') || (inputLine == 'l2')) {
+            var serial = (inputLine == 'l1') ? serial1 : serial2;
+            serial.log = !serial.log; // Toggle logging
+            if (serial.log) {
+                print('Now logging ' + serial.name + ' (' + serial.device + ') to ' + serial.logfile);
+                serial.logstream = fs.createWriteStream(serial.logfile);
+            } else {
+                print('Stopped logging serial (' + serial.device + ') to ' + serial.logfile);
+                serial.logstream.close();
+            }
+            prompt();
+            return;
+        }
+
+        if (inputLine.toLowerCase() == 'q') {
+            cleanup();
+            process.exit(0);
+        }
+
+        // Do this if nothing else
+        print('Unknown command.');
+        prompt();
+    };
+
     commandBox.on('keypress', function (key) {
         if (key) { // Check it because arrows and such come through undefined....
             var lastLineIndex = commandBox.getLines().length - 1;
             var lastLine = commandBox.getLine(lastLineIndex);
-            if (!((input2 == '') && (key == '\r'))) { // This is a mess, related to the fact that after a \r is received, another one comes through right after for no apparent reason
+
+            if (!((inputBuffer == '') && (key == '\r'))) { // This is a mess, related to the fact that after a \r is received, another one comes through right after for no apparent reason
                 lastLine = lastLine.substr(0, lastLine.length - 1);
             }
 
             if (key == '\r') {// If it's a carriage return
                 commandBox.setLine(lastLineIndex, lastLine);
                 screen.render();
-                processCommand(input2);
-                input2 = '';
-            } else {
-                input2 += key;
-                lastLine += key + '█';
+                processCommand(inputBuffer);
+                inputBuffer = '';
+                return;
+            }
+
+            if (key.charCodeAt(0) == 127) { // Deal with backspace character
+                if (inputBuffer.length > 0) {
+                    // screen.debug(inputBuffer.length + ' : ' + inputBuffer);
+                    inputBuffer = inputBuffer.substr(0, inputBuffer.length - 1); // Remove the last character from the inputBuffer
+                    lastLine = lastLine.substr(0, lastLine.length - 1);
+                    commandBox.setLine(lastLineIndex, lastLine + cursorChar);
+                    screen.render();
+                }
+                return;
+            }
+
+            // No other triggers, just add it to the input line (after a quick filter)
+            if( /[a-zA-Z0-9 ]/.test(key)) {
+                inputBuffer += key;
+                lastLine += key + cursorChar;
                 commandBox.setLine(lastLineIndex, lastLine);
                 screen.render();
             }
         }
     });
+
+    var printToCommandBox = function (s) {
+        commandBox.pushLine(s);
+        commandBox.setScrollPerc(100);
+        screen.render();
+    };
+
+    var printToViewer = function (s) {
+        outputBox.pushLine(s);
+        outputBox.setScrollPerc(100);
+        screen.render();
+    };
+
+    return {
+        screen: screen,
+        outputBox: outputBox,
+        commandBox: commandBox,
+        printToCommandBox: printToCommandBox,
+        printToViewer: printToViewer,
+        prompt: prompt
+    }
 }
 
-function processCommand(inputLine) {
-    if (inputLine == '') { // If it's empty, skip it
-        return;
-    }
-    if ((inputLine == 'l1') || (inputLine == 'l2')) {
-        var serial = (inputLine == 'l1') ? serial1 : serial2;
-        serial.log = !serial.log; // Toggle logging
-        if (serial.log) {
-            printCommandBox('Now logging ' + serial.name + ' (' + serial.device + ') to ' + serial.logfile);
-            serial.logstream = fs.createWriteStream(serial.logfile);
-        } else {
-            printCommandBox('Stopped logging serial (' + serial.device + ') to ' + serial.logfile);
-            serial.logstream.close();
-        }
-        prompt();
-        return;
-    }
-
-    if (inputLine.toLowerCase() == 'q') {
-        cleanup();
-        process.exit(0);
-    }
-
-    // Do this if nothing else
-    printCommandBox('Unknown command.');
-    prompt();
-}
 
 // --------------------------------------------------------------------------------------
 
 
 setup().then(main).catch(function (err) {
-    printCommand(err);
+    print(err);
     abort = true;
     cleanup();
 });
@@ -145,10 +220,8 @@ setup().then(main).catch(function (err) {
 function main() {
     initXconnect(serial1, serial2);
     initXconnectListeners();
-    // initUserInput();
-    // buildInput();
-    manageInput();
-    prompt();
+    blessedDisplay.prompt();
+    printViewer('hello world!');
 }
 
 
@@ -183,14 +256,9 @@ function initXconnect(s1, s2) {
             listener(data);
         })
     });
-    printCommand('Cross connecting ' + s1.device + ' to ' + s2.device);
+    print('Cross connecting ' + s1.device + ' to ' + s2.device);
 }
 
-
-
-function prompt() {
-    printCommandBox('> █');
-}
 
 function cleanup() {
     closePorts();
@@ -204,16 +272,17 @@ function cleanup() {
 
 function closePorts() {
     if (serial1.port) {
-        printCommand(serial1.device + ' closing');
+        print(serial1.device + ' closing');
         serial1.port.close();
     }
     if (serial2.port) {
-        printCommand(serial2.device + ' closing');
+        print(serial2.device + ' closing');
         serial2.port.close();
     }
 }
 
 function setup() {
+    blessedDisplay = initBlessed();
     return new Promise(function (resolve, reject) {
         Promise.all([
             openSerial({
@@ -247,9 +316,9 @@ function openSerial(s) {
             }
         });
         serialPort1.on('open', function () { // Wait for serial port to be open
-            printCommand(s.device + ' opened as ' + s.name);
+            print(s.device + ' opened as ' + s.name);
             if (abort) {
-                printCommand(s.device + ' closing');
+                print(s.device + ' closing');
                 serialPort1.close();
                 cleanup();
             }
@@ -258,16 +327,11 @@ function openSerial(s) {
     });
 }
 
-function printCommandBox(s) {
-    commandBox.pushLine(s);
-    commandBox.setScrollPerc(100);
-    screen.render();
+function print(s) {
+    blessedDisplay.printToCommandBox(s);
 }
 
-function printCommand(s) {
-    // process.stdout.write(s)
-    commandBox.pushLine(s.replace(/\n/g, ''));
-    commandBox.setScrollPerc(100);
-    screen.render();
-
+function printViewer(s) {
+    blessedDisplay.printToViewer(s);
 }
+
