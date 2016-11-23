@@ -1,7 +1,8 @@
 var serialPort = require('serialport');
 var fs = require('fs');
 var mavlink = require('mavlink');
-var readline = require('readline');
+// var readline = require('readline');
+var blessed = require('blessed');
 
 var serial1 = {
     device: process.argv[2], // Really the first param after the command name
@@ -26,14 +27,64 @@ var serial2 = {
 
 var abort = false;
 
-var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
+// var rl = readline.createInterface({
+//     input: process.stdin,
+//     output: process.stdout
+// });
+
+var screen = blessed.screen({
+    smartCSR: true,
+    dockBorders: true,
+    mouseEnable: true,
+    debug: true
+});
+screen.title = 'Serial Snoop';
+
+var outputBox = blessed.box({
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '90%',
+    content: '',
+    border: {
+        type: 'line'
+    }
+});
+var commandBox = blessed.box({
+    top: '80%',
+    left: 0,
+    width: '100%',
+    height: '20%',
+    content: '',
+    border: {
+        type: 'line'
+    },
+    style: {
+        hover: {
+            bg: 'red'
+        }
+    },
+    keys: true,
+    vi: true,
+    scrollable: true,
+    alwaysScroll: true,
+    scrollbar: {
+        bg: 'blue',
+        inverse: true
+    },
+    enableInput: true,
+    mouseEnable: true
+});
+screen.append(outputBox);
+screen.append(commandBox);
+screen.render();
+screen.key('Q', function () {
+    process.exit(0);
 });
 
 
 setup().then(main).catch(function (err) {
-    console.log(err);
+    printCommand(err + '\n');
     abort = true;
     cleanup();
 });
@@ -41,7 +92,8 @@ setup().then(main).catch(function (err) {
 function main() {
     initXconnect(serial1, serial2);
     initXconnectListeners();
-    initUserInput();
+    // initUserInput();
+    buildInput();
     prompt();
 }
 
@@ -49,12 +101,12 @@ function main() {
 function initXconnectListeners() {
     serial1.listeners.push(function (data) {
         if (serial1.log) {
-            serial1.logstream.write(data)
+            serial1.logstream.write(data);
         }
     });
     serial2.listeners.push(function (data) {
         if (serial2.log) {
-            serial2.logstream.write(data)
+            serial2.logstream.write(data);
         }
     });
 }
@@ -77,20 +129,69 @@ function initXconnect(s1, s2) {
             listener(data);
         })
     });
-    console.log('Cross connecting ' + s1.device + ' to ' + s2.device);
+    printCommand('Cross connecting ' + s1.device + ' to ' + s2.device + '\n');
+}
+
+var input1 = '';
+function buildInput() {
+    commandBox.on('keypress', function (input) {
+        if (input == '\r') {
+            var lineToProcess = input1;
+            input1 = '';
+            if (lineToProcess.length != '\r') { // It has to be more than just the \r
+                if ((lineToProcess == 'l1') || (lineToProcess == 'l2')) {
+                    var serial = (lineToProcess == 'l1') ? serial1 : serial2;
+                    serial.log = !serial.log; // Toggle logging
+                    if (serial.log) {
+                        printCommand('Now logging ' + serial.name + ' (' + serial.device + ') to ' + serial.logfile + '\n');
+                        prompt();
+                        serial.logstream = fs.createWriteStream(serial.logfile);
+                    } else {
+                        printCommand('Stopped logging serial (' + serial.device + ') to ' + serial.logfile + '\n');
+                        prompt();
+                        serial.logstream.close();
+                    }
+                    return;
+                }
+
+                if (lineToProcess.toLowerCase() == 'q') {
+                    cleanup();
+                    process.exit(0);
+                }
+
+                // Do this if nothing else
+                printCommand('Unknown command.' + '\n');
+                prompt();
+                return;
+            }
+
+        } else {
+            if ((input) && (/[a-zA-Z0-9]/.test(input))) { // Check it because arrows and such come through undefined....
+                var lastLineIndex = commandBox.getLines().length - 1;
+                var lastLine = commandBox.getLine(lastLineIndex);
+                lastLine += input;
+                commandBox.setLine(lastLineIndex, lastLine);
+                screen.render();
+                input1 += input;
+            }
+        }
+    });
 }
 
 function initUserInput() {
-    rl.on('line', function (input) {
+    // rl.on('line', function (input) {
+    commandBox.on('keypress', function (input) {
+        printCommand(input);
+        return;
         if ((input == 'l1') || (input == 'l2')) {
             var serial = (input == 'l1') ? serial1 : serial2;
             serial.log = !serial.log; // Toggle logging
             if (serial.log) {
-                console.log('Now logging ' + serial.name + ' (' + serial.device + ') to ' + serial.logfile);
+                printCommand('Now logging ' + serial.name + ' (' + serial.device + ') to ' + serial.logfile + '\n');
                 prompt();
                 serial.logstream = fs.createWriteStream(serial.logfile);
             } else {
-                console.log('Stopped logging serial (' + serial.device + ') to ' + serial.logfile);
+                printCommand('Stopped logging serial (' + serial.device + ') to ' + serial.logfile + '\n');
                 prompt();
                 serial.logstream.close();
             }
@@ -103,19 +204,18 @@ function initUserInput() {
         }
 
         // Do this if nothing else
-        console.log('Unknown command.');
+        printCommand('Unknown command.' + '\n');
         prompt();
         return;
     });
 }
 
 function prompt() {
-    process.stdout.write('> ');
+    printCommand('x> ');
 }
 
 function cleanup() {
     closePorts();
-    rl.close();
     if (serial1.logstream) {
         serial1.logstream.close();
     }
@@ -126,11 +226,11 @@ function cleanup() {
 
 function closePorts() {
     if (serial1.port) {
-        console.log(serial1.device + ' closing');
+        printCommand(serial1.device + ' closing' + '\n');
         serial1.port.close();
     }
     if (serial2.port) {
-        console.log(serial2.device + ' closing');
+        printCommand(serial2.device + ' closing' + '\n');
         serial2.port.close();
     }
 }
@@ -169,13 +269,21 @@ function openSerial(s) {
             }
         });
         serialPort1.on('open', function () { // Wait for serial port to be open
-            console.log(s.device + ' opened as ' + s.name);
+            printCommand(s.device + ' opened as ' + s.name + '\n');
             if (abort) {
-                console.log(s.device + ' closing');
+                printCommand(s.device + ' closing' + '\n');
                 serialPort1.close();
                 cleanup();
             }
             resolve(serialPort1);
         });
     });
+}
+
+function printCommand(s) {
+    // process.stdout.write(s)
+    commandBox.pushLine(s.replace(/\n/g, ''));
+    commandBox.setScrollPerc(100);
+    screen.render();
+
 }
