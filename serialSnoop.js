@@ -112,12 +112,11 @@ function initBlessed() {
 
     var inputBuffer = '';
 
-    // var cursorChar = '{blink}✿{/blink}';
-    var cursorChar = '✿';
+    var cursorChar = '{blink}✿{/blink}';
+    // var cursorChar = '✿';
     // var cursorChar = '☀'; // ☀
-    var prompt = function () {
-        print('> ' + cursorChar);
-    };
+
+    var prompt = ('> ');
 
     var processCommand = function (inputLine) {
         if (inputLine == '') { // If it's empty, skip it
@@ -133,7 +132,6 @@ function initBlessed() {
                 print('Stopped logging serial (' + serial.device + ') to ' + serial.logfile);
                 serial.logstream.close();
             }
-            prompt();
             return;
         }
 
@@ -143,24 +141,23 @@ function initBlessed() {
         }
 
         // Do this if nothing else
-        print('Unknown command.');
-        prompt();
+        print('Unknown command');
     };
 
     commandBox.on('keypress', function (key) {
         if (key) { // Check it because arrows and such come through undefined....
             var lastLineIndex = commandBox.getLines().length - 1;
-            var lastLine = commandBox.getLine(lastLineIndex);
 
-            if (!((inputBuffer == '') && (key == '\r'))) { // This is a mess, related to the fact that after a \r is received, another one comes through right after for no apparent reason
-                lastLine = lastLine.substr(0, lastLine.length - 1);
+            if ((inputBuffer == '') && (key == '\r')) { // This is a mess, related to the fact that after a \r is received, another one comes through right after for no apparent reason
+                return;
             }
 
             if (key == '\r') {// If it's a carriage return
-                commandBox.setLine(lastLineIndex, lastLine);
-                screen.render();
+                commandBox.setLine(lastLineIndex, prompt + inputBuffer);
                 processCommand(inputBuffer);
                 inputBuffer = '';
+                print(prompt + cursorChar);
+                screen.render();
                 return;
             }
 
@@ -168,18 +165,16 @@ function initBlessed() {
                 if (inputBuffer.length > 0) {
                     // screen.debug(inputBuffer.length + ' : ' + inputBuffer);
                     inputBuffer = inputBuffer.substr(0, inputBuffer.length - 1); // Remove the last character from the inputBuffer
-                    lastLine = lastLine.substr(0, lastLine.length - 1);
-                    commandBox.setLine(lastLineIndex, lastLine + cursorChar);
+                    commandBox.setLine(lastLineIndex, prompt + inputBuffer + cursorChar);
                     screen.render();
                 }
                 return;
             }
 
             // No other triggers, just add it to the input line (after a quick filter)
-            if( /[a-zA-Z0-9 ]/.test(key)) {
+            if( /[a-zA-Z0-9 .!@#$%^&*()_+]/.test(key)) {
                 inputBuffer += key;
-                lastLine += key + cursorChar;
-                commandBox.setLine(lastLineIndex, lastLine);
+                commandBox.setLine(lastLineIndex, prompt + inputBuffer + cursorChar);
                 screen.render();
             }
         }
@@ -203,7 +198,8 @@ function initBlessed() {
         commandBox: commandBox,
         printToCommandBox: printToCommandBox,
         printToViewer: printToViewer,
-        prompt: prompt
+        prompt: prompt,
+        cursorChar: cursorChar
     }
 }
 
@@ -220,7 +216,7 @@ setup().then(main).catch(function (err) {
 function main() {
     initXconnect(serial1, serial2);
     initXconnectListeners();
-    blessedDisplay.prompt();
+    print(blessedDisplay.prompt + blessedDisplay.cursorChar);
     printViewer('hello world!');
 }
 
