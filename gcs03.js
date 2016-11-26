@@ -58,28 +58,44 @@ function getMission(mavlinkTransmit, mavlinkReceive, serial){
                 });
             })
         })
-        .then(function(seq){
-            console.log('x: ' + seq);
-            return new Promise(function (resolve, reject) {
-                mavlinkReceive.mavlink.once('MISSION_ITEM', function(message, fields){ // Prepare a one time listener for the count
-                    resolve(fields.x);
-                });
+        .then(function(numMissionItems){
 
-                mavlinkTransmit.mavlink.createMessage('MISSION_REQUEST', { // Transmit the request, a response should hit the listener above
-                    seq: 0,
-                    target_system: 1,
-                    target_component: 190
-                }, function (message) {
-                    serial.port.write(message.buffer);
-                });
-            })
+
+            return Promise.all([
+                new Promise(function (resolve, reject) {
+                    mavlinkReceive.mavlink.once('MISSION_ITEM', function(message, fields){ // Prepare a one time listener for the count
+                        resolve(fields.x);
+                    });
+
+                    mavlinkTransmit.mavlink.createMessage('MISSION_REQUEST', { // Transmit the request, a response should hit the listener above
+                        seq: 0,
+                        target_system: 1,
+                        target_component: 190
+                    }, function (message) {
+                        serial.port.write(message.buffer);
+                    });
+                }),
+                new Promise(function (resolve, reject) {
+                    mavlinkReceive.mavlink.once('MISSION_ITEM', function(message, fields){ // Prepare a one time listener for the count
+                        resolve(fields.x);
+                    });
+
+                    mavlinkTransmit.mavlink.createMessage('MISSION_REQUEST', { // Transmit the request, a response should hit the listener above
+                        seq: 1,
+                        target_system: 1,
+                        target_component: 190
+                    }, function (message) {
+                        serial.port.write(message.buffer);
+                    });
+                })
+
+            ]).then(function (results) {
+                resolve(results[0]);
+            });
         })
         .then(function(result){
             resolve(result);
         });
-
-
-
 
     });
 }
