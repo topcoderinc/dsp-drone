@@ -1,5 +1,5 @@
 // Sets up a serial port and two mavlink objects (one for transmitting and one for receiving).
-// The mavlinkReceive object listens to any messages from any System and Component, mavLinktranmist tranmits as System 252, Component 1
+// The getMavlinkReceive object listens to any messages from any System and Component, mavLinktranmist tranmits as System 252, Component 1
 // The githib documentation is a little misleading, almost suggesting that you use the same object for transmitting a receiving
 // however, the System and Component IDs are fixed once you instantiate the object, so if you *listen* to system #1, then you'd also
 // be transmitting as system 1.

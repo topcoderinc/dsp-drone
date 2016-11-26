@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "blessed": "^0.1.81",
+    "json-stringify-pretty-compact": "^1.0.2",
     "mavlink": "^1.0.1",
     "serialport": "^4.0.6",
     "telnet2": "0.0.1"
