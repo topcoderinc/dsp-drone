@@ -55,7 +55,7 @@ function initMavlinkDecode() {
             var decodedMessage = params.mavlinkDecoder.decodeMessage(message);
             var messageId = message.id;
             var messagaName = params.mavlinkDecoder.getMessageName(messageId);
-            printViewer('----- ' + params.serial.device + ' [' + messagaName + ' ID#' + messageId + '] -----');
+            printViewer('----- ' + params.serial.device + ' [' + messagaName + ' ID#' + messageId + '][seq:'+ message.sequence + '] -----');
             printViewer(stringify(decodedMessage, {maxLength: 120, indent: 2}) + '\n');
 
             params.serial.params.mavlinkLogStream.write('----- [' + dateString + '] ' + params.serial.device + ' [' + messagaName + ' ID#' + messageId + '] -----\n');
