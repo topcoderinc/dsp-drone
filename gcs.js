@@ -44,7 +44,7 @@ let mavDataStreams = {
 
 let mavlinkTransmit = {
     mavlink: null,
-    systemId: 252, // Transmit from 252 (a common GCS ID number)
+    systemId: 255, // Transmit from 252 or 255 (common GCS ID numbers). Note in order to do certain things, like override RC channels, your GCS ID must match the SYSID_MYGCS param in APM (there might be a similar restriction in PX4).
     componentId: 1,
     name: 'mavlinkTransmit'
 };
@@ -194,22 +194,22 @@ function mavlinkOverrideRcChannel(channel, ppmValue){
 }
 
 function _mavlinkOverrideRcChannel(mavlinkTransmit, serial, channel, ppmValue){
-    // let overrideCommand = {
-    //     target_system: 1, // System ID
-    //     target_component: 1, // Component ID
-    //     chan1_raw: 65535, //  RC channel 1 value, in microseconds. A value of UINT16_MAX means to ignore this field.
-    //     chan2_raw: 65535, //  RC channel 2 value, in microseconds. A value of UINT16_MAX means to ignore this field.
-    //     chan3_raw: 65535, //  RC channel 3 value, in microseconds. A value of UINT16_MAX means to ignore this field.
-    //     chan4_raw: 65535, //  RC channel 4 value, in microseconds. A value of UINT16_MAX means to ignore this field.
-    //     chan5_raw: 65535, //  RC channel 5 value, in microseconds. A value of UINT16_MAX means to ignore this field.
-    //     chan6_raw: 65535, //  RC channel 6 value, in microseconds. A value of UINT16_MAX means to ignore this field.
-    //     chan7_raw: 65535, //  RC channel 7 value, in microseconds. A value of UINT16_MAX means to ignore this field.
-    //     chan8_raw: 65535 //  RC channel 8 value, in microseconds. A value of UINT16_MAX means to ignore this field.
-    // };
-    // overrideCommand[`chan${channel}_raw`] = ppmValue;
-    // mavlinkTransmit.mavlink.createMessage('RC_CHANNELS_OVERRIDE', overrideCommand, function (message) {
-    //     serial1.port.write(message.buffer);
-    // });
+    let overrideCommand = {
+        target_system: 1, // System ID
+        target_component: 1, // Component ID
+        chan1_raw: 0, //  RC channel 1 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan2_raw: 0, //  RC channel 2 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan3_raw: 0, //  RC channel 3 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan4_raw: 0, //  RC channel 4 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan5_raw: 0, //  RC channel 5 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan6_raw: 0, //  RC channel 6 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan7_raw: 0, //  RC channel 7 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan8_raw: 0 //  RC channel 8 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+    };
+    overrideCommand[`chan${channel}_raw`] = ppmValue;
+    mavlinkTransmit.mavlink.createMessage('RC_CHANNELS_OVERRIDE', overrideCommand, function (message) {
+        serial1.port.write(message.buffer);
+    });
 }
 
 function mavlinkSendArm(enable){
@@ -242,9 +242,41 @@ function _mavlinkSendArm(mavlinkTransmit, mavlinkReceive, serial, enable){
             'param6': 0, // Unused
             'param7': 0 // Unused
         }, function (message) {
-            serial1.port.write(message.buffer);
+            serial.port.write(message.buffer);
         });
     })
+}
+
+function mavlinkSetMode(mode){
+    return _mavlinkSetMode(mavlinkTransmit, mavlinkReceive, serial1, mode);
+}
+
+function _mavlinkSetMode(mavlinkTransmit, mavlinkReceive, serial, mode){
+
+    // This is the non-depreciated way to do it, but not supported by APM
+    // mavlinkTransmit.mavlink.createMessage('COMMAND_LONG', { // Send ARM command
+    //     'target_system': 1, // System which should execute the command
+    //     'target_component': 1, // Component which should execute the command, 0 for all components, 1 for PX4, 250 for APM
+    //     'command': 176, // Set system mode.
+    //     'confirmation': 0, // 0: First transmission of this command. 1-255: Confirmation transmissions (e.g. for kill command)
+    //     'param1': mode, // Mode, as defined by ENUM MAV_MODE
+    //     'param2': 0, // Custom mode - this is system specific, please refer to the individual autopilot specifications for details.
+    //     'param3': 0, // Custom sub mode - this is system specific, please refer to the individual autopilot specifications for details.
+    //     'param4': 0, // Unused
+    //     'param5': 0, // Unused
+    //     'param6': 0, // Unused
+    //     'param7': 0 // Unused
+    // }, function (message) {
+    //     serial.port.write(message.buffer);
+    // });
+
+    mavlinkTransmit.mavlink.createMessage('SET_MODE', {
+        custom_mode: mode,
+        target_system: 1,
+        base_mode: 1
+        }, function (message) {
+            serial.port.write(message.buffer);
+        });
 }
 
 function getMissionListPartial(mavlinkTransmit, mavlinkReceive, serial) { // PX4 isn't responding to this, not sure about APM
@@ -415,6 +447,7 @@ module.exports = {
     mavlinkSendMission: mavlinkSendMission,
     mavlinkSendArm: mavlinkSendArm,
     mavlinkOverrideRcChannel: mavlinkOverrideRcChannel,
+    mavlinkSetMode: mavlinkSetMode,
     MAV_DATA_STREAM_ALL: MAV_DATA_STREAM_ALL,
     MAV_DATA_STREAM_RAW_SENSORS: MAV_DATA_STREAM_RAW_SENSORS,
     MAV_DATA_STREAM_EXTENDED_STATUS: MAV_DATA_STREAM_EXTENDED_STATUS,

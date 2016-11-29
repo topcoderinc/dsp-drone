@@ -80,6 +80,11 @@ function main() {
             .catch(err => {
                 res.json({result: 'error', detail: err});
             });
+    });
+
+    app.post('/api/v1/command/mode', function (req, res) {
+        gcs.mavlinkSetMode(req.body.mode);
+        res.json({result: 'success'});
 
     });
 
