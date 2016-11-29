@@ -10,7 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "blessed": "^0.1.81",
+    "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
+    "express": "^4.14.0",
     "json-stringify-pretty-compact": "^1.0.2",
+    "lodash": "^4.17.2",
     "mavlink": "^1.0.1",
     "serialport": "^4.0.6",
     "telnet2": "0.0.1"

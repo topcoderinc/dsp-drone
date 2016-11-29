@@ -1,7 +1,7 @@
 var serialPort = require('serialport');
 var fs = require('fs');
 // var mavlink = require('mavlink');
-var gcs = require('./gcsLib.js');
+var gcs = require('./gcs.js');
 var blessed = require('blessed');
 var stringify = require("json-stringify-pretty-compact");
 
@@ -65,11 +65,17 @@ function initMavlinkDecode() {
         params.serial.params.mavlinkDecoder = params.mavlinkDecoder; // Wow...
     };
 
-    var mavlinkDecoder1 = gcs.createMavlinkDecoder(); // Maybe just use mavlink directly if this is all I'm doing with it
-    initListeners({mavlinkDecoder: mavlinkDecoder1, serial: serial1});
+    // var mavlinkDecoder1 = gcs.createMavlinkDecoder(); // Maybe just use mavlink directly if this is all I'm doing with it
+    // initListeners({mavlinkDecoder: mavlinkDecoder1, serial: serial1});
+    gcs.createMavlinkDecoder().then((mavlinkDecoder)=>{
+        initListeners({mavlinkDecoder: mavlinkDecoder, serial: serial1});
+    });
 
-    var mavlinkDecoder2 = gcs.createMavlinkDecoder();
-    initListeners({mavlinkDecoder: mavlinkDecoder2, serial: serial2});
+    // var mavlinkDecoder2 = gcs.createMavlinkDecoder();
+    // initListeners({mavlinkDecoder: mavlinkDecoder2, serial: serial2});
+    gcs.createMavlinkDecoder().then((mavlinkDecoder)=>{
+        initListeners({mavlinkDecoder: mavlinkDecoder, serial: serial2});
+    });
 }
 
 
