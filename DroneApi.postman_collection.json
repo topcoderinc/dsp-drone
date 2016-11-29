@@ -1,0 +1,349 @@
+{
+	"variables": [],
+	"info": {
+		"name": "DroneApi",
+		"_postman_id": "79ea5ef0-ec17-0ea5-809e-9826e24b5512",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API Ping",
+			"request": {
+				"url": "{{URL}}",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Enable MAV_DATA_STREAM_POSITION",
+			"request": {
+				"url": "{{URL}}/telemetry/mav_data_stream_position",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rate\": 1,\n\t\"enable\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Enable MAV_DATA_STREAM_RC_CHANNELS",
+			"request": {
+				"url": "{{URL}}/telemetry/mav_data_stream_rc_channels",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rate\": 1,\n\t\"enable\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Enable MAV_DATA_STREAM_RAW_SENSORS",
+			"request": {
+				"url": "{{URL}}/telemetry/mav_data_stream_raw_sensors",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rate\": 1,\n\t\"enable\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Disable MAV_DATA_STREAM_POSITION",
+			"request": {
+				"url": "{{URL}}/telemetry/mav_data_stream_position",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rate\": 1,\n\t\"enable\": false\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Enable MAV_DATA_STREAM_ALL",
+			"request": {
+				"url": "{{URL}}/telemetry/mav_data_stream_all",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rate\": 1,\n\t\"enable\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Disable MAV_DATA_STREAM_ALL",
+			"request": {
+				"url": "{{URL}}/telemetry/mav_data_stream_all",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rate\": 1,\n\t\"enable\": false\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get Telemetry (LOCAL_POSITION_NED)",
+			"request": {
+				"url": "{{URL}}/telemetry/local_position_ned",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"MAV_DATA_STREAM_POSITION\",\n\t\"rate\": 1,\n\t\"enable\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get Telemetry (GLOBAL_POSITION_INT)",
+			"request": {
+				"url": "{{URL}}/telemetry/global_position_int",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"MAV_DATA_STREAM_POSITION\",\n\t\"rate\": 1,\n\t\"enable\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get Telemetry (RC_CHANNELS_RAW)",
+			"request": {
+				"url": "{{URL}}/telemetry/rc_channels_raw",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"MAV_DATA_STREAM_POSITION\",\n\t\"rate\": 1,\n\t\"enable\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get Telemetry (GPS_STATUS)",
+			"request": {
+				"url": "{{URL}}/telemetry/gps_status",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"MAV_DATA_STREAM_POSITION\",\n\t\"rate\": 1,\n\t\"enable\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get Telemetry (GPS_RAW_INT)",
+			"request": {
+				"url": "{{URL}}/telemetry/gps_raw_int",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"MAV_DATA_STREAM_POSITION\",\n\t\"rate\": 1,\n\t\"enable\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get Mission",
+			"request": {
+				"url": "{{URL}}/mission",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"MAV_DATA_STREAM_POSITION\",\n\t\"rate\": 1,\n\t\"enable\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "send Mission 1",
+			"request": {
+				"url": "{{URL}}/mission",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"param1\": 15,\n\t\"param2\": 0,\n\t\"param3\": 0,\n\t\"param4\": 0,\n\t\"x\": 42.14289093017578,\n\t\"y\": -88.01959228515625,\n\t\"z\": 50,\n\t\"seq\": 0,\n\t\"command\": 22,\n\t\"target_system\": 1,\n\t\"target_component\": 190,\n\t\"frame\": 3,\n\t\"current\": 1,\n\t\"autocontinue\": 1\n}, {\n\t\"param1\": 0,\n\t\"param2\": 0,\n\t\"param3\": 0,\n\t\"param4\": 0,\n\t\"x\": 42.14329147338867,\n\t\"y\": -88.01960754394531,\n\t\"z\": 50,\n\t\"seq\": 1,\n\t\"command\": 16,\n\t\"target_system\": 1,\n\t\"target_component\": 190,\n\t\"frame\": 3,\n\t\"current\": 0,\n\t\"autocontinue\": 1\n}, {\n\t\"param1\": 0,\n\t\"param2\": 0,\n\t\"param3\": 0,\n\t\"param4\": 0,\n\t\"x\": 42.14314270019531,\n\t\"y\": -88.01907348632812,\n\t\"z\": 50,\n\t\"seq\": 2,\n\t\"command\": 16,\n\t\"target_system\": 1,\n\t\"target_component\": 190,\n\t\"frame\": 3,\n\t\"current\": 0,\n\t\"autocontinue\": 1\n}, {\n\t\"param1\": 0,\n\t\"param2\": 0,\n\t\"param3\": 0,\n\t\"param4\": 0,\n\t\"x\": 42.1425666809082,\n\t\"y\": -88.0190200805664,\n\t\"z\": 50,\n\t\"seq\": 3,\n\t\"command\": 16,\n\t\"target_system\": 1,\n\t\"target_component\": 190,\n\t\"frame\": 3,\n\t\"current\": 0,\n\t\"autocontinue\": 1\n}, {\n\t\"param1\": 0,\n\t\"param2\": 0,\n\t\"param3\": 0,\n\t\"param4\": 0,\n\t\"x\": 42.142337799072266,\n\t\"y\": -88.0195541381836,\n\t\"z\": 50,\n\t\"seq\": 4,\n\t\"command\": 16,\n\t\"target_system\": 1,\n\t\"target_component\": 190,\n\t\"frame\": 3,\n\t\"current\": 0,\n\t\"autocontinue\": 1\n}, {\n\t\"param1\": 0,\n\t\"param2\": 0,\n\t\"param3\": 0,\n\t\"param4\": 0,\n\t\"x\": 42.14253234863281,\n\t\"y\": -88.02017211914062,\n\t\"z\": 50,\n\t\"seq\": 5,\n\t\"command\": 16,\n\t\"target_system\": 1,\n\t\"target_component\": 190,\n\t\"frame\": 3,\n\t\"current\": 0,\n\t\"autocontinue\": 1\n}, {\n\t\"param1\": 0,\n\t\"param2\": 0,\n\t\"param3\": 0,\n\t\"param4\": 0,\n\t\"x\": 42.143089294433594,\n\t\"y\": -88.02022552490234,\n\t\"z\": 50,\n\t\"seq\": 6,\n\t\"command\": 16,\n\t\"target_system\": 1,\n\t\"target_component\": 190,\n\t\"frame\": 3,\n\t\"current\": 0,\n\t\"autocontinue\": 1\n}, {\n\t\"param1\": 0,\n\t\"param2\": 0,\n\t\"param3\": 0,\n\t\"param4\": 0,\n\t\"x\": 42.1429443359375,\n\t\"y\": -88.01970672607422,\n\t\"z\": 50,\n\t\"seq\": 7,\n\t\"command\": 16,\n\t\"target_system\": 1,\n\t\"target_component\": 190,\n\t\"frame\": 3,\n\t\"current\": 0,\n\t\"autocontinue\": 1\n}]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "send Mission 2",
+			"request": {
+				"url": "{{URL}}/mission",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"param1\": 15,\n\t\"param2\": 0,\n\t\"param3\": 0,\n\t\"param4\": 0,\n\t\"x\": 42.14289093017578,\n\t\"y\": -88.01959228515625,\n\t\"z\": 50,\n\t\"seq\": 0,\n\t\"command\": 22,\n\t\"target_system\": 1,\n\t\"target_component\": 190,\n\t\"frame\": 3,\n\t\"current\": 1,\n\t\"autocontinue\": 1\n}]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Command ARM (true)",
+			"request": {
+				"url": "{{URL}}/command/arm",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"enable\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Command ARM (false)",
+			"request": {
+				"url": "{{URL}}/command/arm",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"enable\": false\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "override RC 1",
+			"request": {
+				"url": "{{URL}}/rc/channel/1",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"ppm\": 1100\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Command SetMode (0)",
+			"request": {
+				"url": "{{URL}}/command/mode",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"mode\": 0\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
