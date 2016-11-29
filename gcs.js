@@ -44,7 +44,7 @@ let mavDataStreams = {
 
 let mavlinkTransmit = {
     mavlink: null,
-    systemId: 252, // Transmit from 252 (a common GCS ID number)
+    systemId: 255, // Transmit from 252 or 255 (common GCS ID numbers). Note in order to do certain things, like override RC channels, your GCS ID must match the SYSID_MYGCS param in APM (there might be a similar restriction in PX4).
     componentId: 1,
     name: 'mavlinkTransmit'
 };
@@ -56,44 +56,44 @@ let mavlinkReceive = {
     name: 'mavlinkReceive'
 };
 
-function main() {
-    console.log('Starting');
-    serial1.port.on('data', function (data) {
-        mavlinkReceive.mavlink.parse(data);
-    });
-
-    // mavlinkSendArm(mavlinkTransmit, mavlinkReceive, serial1)
-    // .then(function(result){
-    //     console.log(result);
-    //     serial1.port.close();
-    // })
-    // .catch(function(result){
-    //     console.log('Error:' + result);
-    //     serial1.port.close();
-    // })
-
-    // mavlinkSendMission(mavlinkTransmit, mavlinkReceive, serial1, missionT)
-    // .then(function(result){
-    //     console.log(result);
-    //     serial1.port.close();
-    // });
-
-    // mavlinkGetMission(mavlinkTransmit, mavlinkReceive, serial1)
-    // .then(function(result){
-    //     console.log(result);
-    //     serial1.port.close();
-    // });
-
-
-
-    mavlinkReceive.mavlink.on('GLOBAL_POSITION_INT', function (message, fields) {
-        console.log(fields);
-    });
-
-    _mavlinkRequestDataStream(mavlinkTransmit, serial1, 6, 1, true);
-
-
-}
+// function main() {
+//     console.log('Starting');
+//     serial1.port.on('data', function (data) {
+//         mavlinkReceive.mavlink.parse(data);
+//     });
+//
+//     // _mavlinkSendArm(mavlinkTransmit, mavlinkReceive, serial1)
+//     // .then(function(result){
+//     //     console.log(result);
+//     //     serial1.port.close();
+//     // })
+//     // .catch(function(result){
+//     //     console.log('Error:' + result);
+//     //     serial1.port.close();
+//     // })
+//
+//     // _mavlinkSendMission(mavlinkTransmit, mavlinkReceive, serial1, missionT)
+//     // .then(function(result){
+//     //     console.log(result);
+//     //     serial1.port.close();
+//     // });
+//
+//     // _mavlinkGetMission(mavlinkTransmit, mavlinkReceive, serial1)
+//     // .then(function(result){
+//     //     console.log(result);
+//     //     serial1.port.close();
+//     // });
+//
+//
+//
+//     mavlinkReceive.mavlink.on('GLOBAL_POSITION_INT', function (message, fields) {
+//         console.log(fields);
+//     });
+//
+//     _mavlinkRequestDataStream(mavlinkTransmit, serial1, 6, 1, true);
+//
+//
+// }
 
 function getTelemetry(stream){
     return telemetry[stream];
@@ -121,6 +121,7 @@ function mavlinkRequestDataStream(streamId, rate, enable){
         });
     }
     _mavlinkRequestDataStream(mavlinkTransmit, serial1, idNumber, rate, enable);
+    return({enable: enable, streams: mavDataStreams[idName].streams});
 }
 
 function _mavlinkRequestDataStream(mavlinkTransmit, serial, streamId, rate, enable){
@@ -138,7 +139,10 @@ function _mavlinkRequestDataStream(mavlinkTransmit, serial, streamId, rate, enab
     })
 }
 
-function mavlinkSendMission(mavlinkTransmit, mavlinkReceive, serial, mission){
+function mavlinkSendMission(mission){
+    return _mavlinkSendMission(mavlinkTransmit, mavlinkReceive, serial1, mission);
+}
+function _mavlinkSendMission(mavlinkTransmit, mavlinkReceive, serial, mission){
     return new Promise(function(resolve, reject){
         // Basically what this constructs is an array of promises, first with a listener to receive the ACK (which actually comes at the end)
         // then with a set of listeners to receive each request for a waypoint
@@ -169,9 +173,9 @@ function mavlinkSendMission(mavlinkTransmit, mavlinkReceive, serial, mission){
                 })
             ]
         )
-            .then(function(result){
-                resolve(result);
-            });
+        .then(function(result){
+            resolve(result);
+        });
 
         mavlinkTransmit.mavlink.createMessage('MISSION_COUNT', { // Trigger the start of loading the mission
             count: mission.length,
@@ -185,8 +189,34 @@ function mavlinkSendMission(mavlinkTransmit, mavlinkReceive, serial, mission){
 
 }
 
+function mavlinkOverrideRcChannel(channel, ppmValue){
+    _mavlinkOverrideRcChannel(mavlinkTransmit, serial1, channel, ppmValue);
+}
 
-function mavlinkSendArm(mavlinkTransmit, mavlinkReceive, serial){
+function _mavlinkOverrideRcChannel(mavlinkTransmit, serial, channel, ppmValue){
+    let overrideCommand = {
+        target_system: 1, // System ID
+        target_component: 1, // Component ID
+        chan1_raw: 0, //  RC channel 1 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan2_raw: 0, //  RC channel 2 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan3_raw: 0, //  RC channel 3 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan4_raw: 0, //  RC channel 4 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan5_raw: 0, //  RC channel 5 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan6_raw: 0, //  RC channel 6 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan7_raw: 0, //  RC channel 7 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+        chan8_raw: 0 //  RC channel 8 value, in microseconds. A value of UINT16_MAX means to ignore this field.
+    };
+    overrideCommand[`chan${channel}_raw`] = ppmValue;
+    mavlinkTransmit.mavlink.createMessage('RC_CHANNELS_OVERRIDE', overrideCommand, function (message) {
+        serial1.port.write(message.buffer);
+    });
+}
+
+function mavlinkSendArm(enable){
+    return _mavlinkSendArm(mavlinkTransmit, mavlinkReceive, serial1, enable);
+}
+
+function _mavlinkSendArm(mavlinkTransmit, mavlinkReceive, serial, enable){
     return new Promise(function (resolve, reject) {
         let timeout = setTimeout(function () { // Return an error if I don't get an ACK after a while
             resolve('Error: mavlinkSendArm received no response');
@@ -204,7 +234,7 @@ function mavlinkSendArm(mavlinkTransmit, mavlinkReceive, serial){
             'target_component': 1, // Component which should execute the command, 0 for all components, 1 for PX4, 250 for APM
             'command': 400, // Command ID, as defined by MAV_CMD enum. (MAV_CMD_COMPONENT_ARM_DISARM)
             'confirmation': 0, // 0: First transmission of this command. 1-255: Confirmation transmissions (e.g. for kill command)
-            'param1': 1, // Mission Param #1	1 to arm, 0 to disarm
+            'param1': enable, // Mission Param #1	1 to arm, 0 to disarm
             'param2': 0, // Unused
             'param3': 0, // Unused
             'param4': 0, // Unused
@@ -212,9 +242,41 @@ function mavlinkSendArm(mavlinkTransmit, mavlinkReceive, serial){
             'param6': 0, // Unused
             'param7': 0 // Unused
         }, function (message) {
-            serial1.port.write(message.buffer);
+            serial.port.write(message.buffer);
         });
     })
+}
+
+function mavlinkSetMode(mode){
+    return _mavlinkSetMode(mavlinkTransmit, mavlinkReceive, serial1, mode);
+}
+
+function _mavlinkSetMode(mavlinkTransmit, mavlinkReceive, serial, mode){
+
+    // This is the non-depreciated way to do it, but not supported by APM
+    // mavlinkTransmit.mavlink.createMessage('COMMAND_LONG', { // Send ARM command
+    //     'target_system': 1, // System which should execute the command
+    //     'target_component': 1, // Component which should execute the command, 0 for all components, 1 for PX4, 250 for APM
+    //     'command': 176, // Set system mode.
+    //     'confirmation': 0, // 0: First transmission of this command. 1-255: Confirmation transmissions (e.g. for kill command)
+    //     'param1': mode, // Mode, as defined by ENUM MAV_MODE
+    //     'param2': 0, // Custom mode - this is system specific, please refer to the individual autopilot specifications for details.
+    //     'param3': 0, // Custom sub mode - this is system specific, please refer to the individual autopilot specifications for details.
+    //     'param4': 0, // Unused
+    //     'param5': 0, // Unused
+    //     'param6': 0, // Unused
+    //     'param7': 0 // Unused
+    // }, function (message) {
+    //     serial.port.write(message.buffer);
+    // });
+
+    mavlinkTransmit.mavlink.createMessage('SET_MODE', {
+        custom_mode: mode,
+        target_system: 1,
+        base_mode: 1
+        }, function (message) {
+            serial.port.write(message.buffer);
+        });
 }
 
 function getMissionListPartial(mavlinkTransmit, mavlinkReceive, serial) { // PX4 isn't responding to this, not sure about APM
@@ -256,7 +318,11 @@ function getMissionListPartial(mavlinkTransmit, mavlinkReceive, serial) { // PX4
     });
 }
 
-function mavlinkGetMission(mavlinkTransmit, mavlinkReceive, serial) { // This was a bitch to do with promises...
+function mavlinkGetMission(){
+    return _mavlinkGetMission(mavlinkTransmit, mavlinkReceive, serial1);
+}
+
+function _mavlinkGetMission(mavlinkTransmit, mavlinkReceive, serial) { // This was a bitch to do with promises...
     return new Promise(function (resolve, reject) {
         Promise.resolve() // Only starting with this to keep it looking consistent (instead of starting with just a Promise, which I also could have done
             .then(function () {
@@ -377,6 +443,11 @@ module.exports = {
     createMavlinkDecoder: createMavlinkDecoder,
     mavlinkRequestDataStream: mavlinkRequestDataStream,
     getTelemetry: getTelemetry,
+    mavlinkGetMission: mavlinkGetMission,
+    mavlinkSendMission: mavlinkSendMission,
+    mavlinkSendArm: mavlinkSendArm,
+    mavlinkOverrideRcChannel: mavlinkOverrideRcChannel,
+    mavlinkSetMode: mavlinkSetMode,
     MAV_DATA_STREAM_ALL: MAV_DATA_STREAM_ALL,
     MAV_DATA_STREAM_RAW_SENSORS: MAV_DATA_STREAM_RAW_SENSORS,
     MAV_DATA_STREAM_EXTENDED_STATUS: MAV_DATA_STREAM_EXTENDED_STATUS,
