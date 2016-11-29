@@ -39,8 +39,48 @@ function main() {
     });
 
     app.post('/api/v1/telemetry/:stream', function (req, res){
-        gcs.mavlinkRequestDataStream(req.params.stream.toUpperCase(), req.body.rate, req.body.enable);
-        res.json({version: gcs.MAV_DATA_STREAM_POSITION}); // fix this
+        let result = gcs.mavlinkRequestDataStream(req.params.stream.toUpperCase(), req.body.rate, req.body.enable);
+        res.json(Object.assign({result: 'success'}, result)); // fix this
+    });
+
+    app.get('/api/v1/mission', function (req, res) {
+        gcs.mavlinkGetMission()
+        .then(mission => {
+            res.json(mission);
+        })
+    });
+
+    app.post('/api/v1/mission', function (req, res) {
+        gcs.mavlinkSendMission(req.body)
+        .then(result => {
+            res.json(result);
+        })
+    });
+
+    app.post('/api/v1/rc/channel/:channelNumber', function (req, res) {
+        gcs.mavlinkOverrideRcChannel(req.params.channelNumber, req.body.ppm);
+
+        res.json({result: 'success'});
+
+        // gcs.mavlinkSendArm(req.body.enable)
+        // .then(result => {
+        //     res.json(result);
+        // })
+        // .catch(err => {
+        //     res.json({result: 'error', detail: err});
+        // });
+
+    });
+
+    app.post('/api/v1/command/arm', function (req, res) {
+        gcs.mavlinkSendArm(req.body.enable)
+            .then(result => {
+                res.json(result);
+            })
+            .catch(err => {
+                res.json({result: 'error', detail: err});
+            });
+
     });
 
     let server = app.listen(3000, function () {
