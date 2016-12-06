@@ -174,6 +174,7 @@ function _mavlinkSendMission(mavlinkTransmit, mavlinkReceive, serial, mission){
             ]
         )
         .then(function(result){
+            mavlinkReceive.mavlink.removeAllListeners('MISSION_REQUEST');
             resolve(result);
         });
 
