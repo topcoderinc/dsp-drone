@@ -166,7 +166,7 @@ function _mavlinkSendMission(mavlinkTransmit, mavlinkReceive, serial, mission){
                                 mavlinkTransmit.mavlink.createMessage('MISSION_ITEM', mission[seq], function (message) {
                                     serial.port.write(message.buffer);
                                 });
-                                resolve(fields);
+                                resolve(mission[seq]);
                             }
                         });
                     })
