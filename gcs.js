@@ -384,6 +384,7 @@ function setup(serial) {
             serial1.port.on('data', data => {
                 mavlinkReceive.mavlink.parse(data);
             });
+            mavlinkReceive.mavlink.setMaxListeners(50);
             resolve();
         }).catch(function (err) {
             reject(err);
