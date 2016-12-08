@@ -1,7 +1,8 @@
 let gcs = require('./gcs.js');
 let express = require('express');
 let bodyParser = require("body-parser");
-let compression = require('compression')
+let compression = require('compression');
+let request = require('request');
 
 let app = express();
 app.use(compression());
@@ -13,8 +14,29 @@ gcs.setup({device: process.argv[2], baudRate: 57600})
 });
 
 function main() {
-    // gcs.mavlinkRequestDataStream(6, 1, false);
-    // gcs.mavlinkRequestDataStream(gcs.MAV_DATA_STREAM_POSITION, 1, false);
+
+    // Setup periodic pings to the DSP (move this somewhere else later)
+    setInterval(function () {
+        var telemetry = gcs.getTelemetry('GLOBAL_POSITION_INT');
+        if (telemetry != undefined){
+            var lat = telemetry.lat / Math.pow(10, 7);
+            var lon = telemetry.lon / Math.pow(10, 7);
+            request.put(
+                'https://kb-dsp-server-dev.herokuapp.com/api/v1/drones/' + process.env.droneId_mongo,
+                {
+                    json: {
+                        lat: lat,
+                        lng: lon
+                    }
+                },
+                function (error, response, body) {
+                    if (error) {
+                        console.log(error)
+                    }
+                }
+            );
+        }
+    }, 60000);
 
     app.get('/api/v1', function (req, res) {
         res.json({version: 1.0});

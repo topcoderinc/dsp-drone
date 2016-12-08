@@ -385,6 +385,7 @@ function setup(serial) {
                 mavlinkReceive.mavlink.parse(data);
             });
             mavlinkReceive.mavlink.setMaxListeners(50);
+            mavlinkRequestDataStream('MAV_DATA_STREAM_ALL', 1, true)
             resolve();
         }).catch(function (err) {
             reject(err);
