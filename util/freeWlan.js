@@ -5,10 +5,6 @@ wpa.unmanageUnusedInterfaces()
 .then((interfaces) => {
     interfaces.forEach((interface) => {
         console.log(interface + ' no longer managed.');
-	fs.writeFile(__dirname + '/unmanagedwifi.txt', interface, (err) => {
-            if (err) {
-                console.log(err);
-            }
-        });
+        fs.writeFileSync(__dirname + '/unmanagedwifi.txt', interface);
     });
 });
