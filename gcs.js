@@ -254,11 +254,33 @@ function mavlinkSendCameraTrigger(){
 }
 
 function _mavlinkSendCameraTrigger(mavlinkTransmit, serial){
-    mavlinkTransmit.mavlink.createMessage('CAMERA_TRIGGER', {
-        time_usec: 0,
-        seq: 0
-    }, function (message) {
-        serial.port.write(message.buffer);
+    return new Promise(function (resolve, reject) {
+        let timeout = setTimeout(function () { // Return an error if I don't get an ACK after a while
+            resolve('Error: mavlinkSendCameraTrigger received no response');
+        }, 5000);
+        mavlinkReceive.mavlink.once('COMMAND_ACK', function (message, fields) { // Prepare a one time listener for the count
+            if (fields.result == 0) {
+                clearTimeout(timeout);
+                resolve(fields);
+            } else {
+                reject(fields);
+            }
+        });
+        mavlinkTransmit.mavlink.createMessage('COMMAND_LONG', {
+            'target_system': 1, // System which should execute the command
+            'target_component': 1, // Component which should execute the command
+            'command': 203, // Command ID, as defined by MAV_CMD enum
+            'confirmation': 0, // 0: First transmission of this command. 1-255: Confirmation transmissions (e.g. for kill command)
+            'param1': 0, // Session control e.g. show/hide lens
+            'param2': 0, // Zoom's absolute position
+            'param3': 0, // Zooming step value to offset zoom from the current position
+            'param4': 0, // Focus Locking, Unlocking or Re-locking
+            'param5': 1, // Shooting Command
+            'param6': 0, // Command Identity
+            'param7': 0 // Empty
+        }, function (message) {
+            serial.port.write(message.buffer);
+        });
     })
 }
 
