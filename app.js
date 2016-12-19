@@ -3,6 +3,9 @@ let express = require('express');
 let bodyParser = require("body-parser");
 let compression = require('compression');
 let request = require('request');
+let gopro = require('./gopro.js');
+
+gopro.setupGPIO(17);
 
 let app = express();
 app.use(compression());
@@ -10,6 +13,7 @@ app.use(bodyParser.json());
 
 gcs.setup({device: process.argv[2], baudRate: 57600})
 .then(() => {
+    gcs.mavlinkSendCameraTrigger();
     main();
 });
 
@@ -110,7 +114,7 @@ function main() {
 
     });
 
-    let server = app.listen(80, function () {
+    let server = app.listen(3000, function () {
         console.log('Server started on port 80');
     });
 }

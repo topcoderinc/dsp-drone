@@ -249,6 +249,19 @@ function _mavlinkSendArm(mavlinkTransmit, mavlinkReceive, serial, enable){
     })
 }
 
+function mavlinkSendCameraTrigger(){
+    _mavlinkSendCameraTrigger(mavlinkTransmit, serial1);
+}
+
+function _mavlinkSendCameraTrigger(mavlinkTransmit, serial){
+    mavlinkTransmit.mavlink.createMessage('CAMERA_TRIGGER', {
+        time_usec: 0,
+        seq: 0
+    }, function (message) {
+        serial.port.write(message.buffer);
+    })
+}
+
 function mavlinkSetMode(mode){
     return _mavlinkSetMode(mavlinkTransmit, mavlinkReceive, serial1, mode);
 }
@@ -452,6 +465,7 @@ module.exports = {
     mavlinkSendArm: mavlinkSendArm,
     mavlinkOverrideRcChannel: mavlinkOverrideRcChannel,
     mavlinkSetMode: mavlinkSetMode,
+    mavlinkSendCameraTrigger: mavlinkSendCameraTrigger,
     MAV_DATA_STREAM_ALL: MAV_DATA_STREAM_ALL,
     MAV_DATA_STREAM_RAW_SENSORS: MAV_DATA_STREAM_RAW_SENSORS,
     MAV_DATA_STREAM_EXTENDED_STATUS: MAV_DATA_STREAM_EXTENDED_STATUS,
