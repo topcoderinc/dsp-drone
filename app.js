@@ -11,7 +11,8 @@ let app = express();
 app.use(compression());
 app.use(bodyParser.json());
 
-gcs.setup({device: process.argv[2], baudRate: 57600})
+let serialDevice = process.env.PIXHAWK_SERIAL || process.argv[2]
+gcs.setup({device: serialDevice, baudRate: 57600})
 .then(() => {
     gcs.mavlinkSendCameraTrigger();
     main();
