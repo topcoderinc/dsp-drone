@@ -250,7 +250,7 @@ function _mavlinkSendArm(mavlinkTransmit, mavlinkReceive, serial, enable){
 }
 
 function mavlinkSendCameraTrigger(){
-    _mavlinkSendCameraTrigger(mavlinkTransmit, serial1);
+    return _mavlinkSendCameraTrigger(mavlinkTransmit, serial1);
 }
 
 function _mavlinkSendCameraTrigger(mavlinkTransmit, serial){

@@ -114,6 +114,16 @@ function main() {
 
     });
 
+    app.post('/api/v1/camera/trigger', function (req, res) {
+        gcs.mavlinkSendCameraTrigger()
+        .then((response) => {
+            res.json({result: 'success'});
+        })
+        .catch(err => {
+            res.json({result: 'error', detail: err});
+        })
+    });
+
     let server = app.listen(3000, function () {
         console.log('Server started on port 80');
     });
