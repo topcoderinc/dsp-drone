@@ -5,13 +5,14 @@ function setupGPIO(gpio){
     if (fs.existsSync('/sys/class/gpio/gpio' + gpio ) == false) {
         fs.writeFileSync('/sys/class/gpio/export', gpio);
     }
+    fs.writeFileSync('/sys/class/gpio/gpio' + gpio + '/direction', 'in');
     let pollRate = 100;
     let cooldown = 3000;
     let cooldownTimer = 0;
 
     setInterval(() => {
         if (cooldownTimer <= 0){
-            if (readGPIO(17) == '1'){
+            if (readGPIO(gpio) == '1'){
                 console.log('Snap!');
                 cooldownTimer = cooldown;
                 takePicture();
