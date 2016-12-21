@@ -28,13 +28,16 @@ function readGPIO(gpio){
 }
 
 function takePicture(){
-    request.get('http://10.5.5.9/gp/gpControl/command/mode?p=1', (() => {
-        request.get('http://10.5.5.9/gp/gpControl/command/shutter?p=1').on('error', (err => {
-            console.log(err);
-        }));
-    })).on('error', (err => {
-        console.log(err);
-    }));
+    request.get('http://10.5.5.9/gp/gpControl/command/mode?p=1')
+    .on('response', (response => {
+        request.get('http://10.5.5.9/gp/gpControl/command/shutter?p=1')
+        .on('error', (err => {
+            console.log('Take Picture Failed');
+        }))
+    }))
+    .on('error', (err => {
+        console.log('Take Picture Failed');
+    }))
 }
 
 module.exports = {
