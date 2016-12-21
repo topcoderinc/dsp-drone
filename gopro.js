@@ -29,7 +29,11 @@ function readGPIO(gpio){
 
 function takePicture(){
     request.get('http://10.5.5.9/gp/gpControl/command/mode?p=1', (() => {
-        request.get('http://10.5.5.9/gp/gpControl/command/shutter?p=1');
+        request.get('http://10.5.5.9/gp/gpControl/command/shutter?p=1').on('error', (err => {
+            console.log(err);
+        }));
+    })).on('error', (err => {
+        console.log(err);
     }));
 }
 
