@@ -5,7 +5,7 @@ let compression = require('compression');
 let request = require('request');
 let gopro = require('./gopro.js');
 
-gopro.setupGPIO(27);
+gopro.setupGPIO(process.env.CAMERA_TRIGGER_GPIO || 27);
 
 let app = express();
 app.use(compression());
