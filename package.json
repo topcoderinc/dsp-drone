@@ -16,6 +16,6 @@
     "json-stringify-pretty-compact": "^1.0.2",
     "lodash": "^4.17.2",
     "mavlink": "^1.0.1",
-    "request": "^2.79.0",
+    "request": "^2.79.0"
   }
 }
