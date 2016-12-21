@@ -14,7 +14,9 @@ app.use(bodyParser.json());
 let serialDevice = process.env.PIXHAWK_SERIAL || process.argv[2]
 gcs.setup({device: serialDevice, baudRate: 57600})
 .then(() => {
-    gcs.mavlinkSendCameraTrigger();
+    gcs.mavlinkSendCameraTrigger().catch((err) => {
+        console.log(err);
+    });
     main();
 });
 
