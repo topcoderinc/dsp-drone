@@ -42,7 +42,7 @@ function main() {
                     if (error) {
                         console.log(error)
                     } else {
-                        console.log(response.noFlyZones);
+                        console.log(body.noFlyZones);
                     }
                 }
             );
