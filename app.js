@@ -22,7 +22,7 @@ gcs.setup({device: serialDevice, baudRate: 57600})
 
 function main() {
     // Test RTL after 30 seconds
-    setTimeout(gcs.mavlinkReturnToLand, 30000);
+    // setTimeout(gcs.mavlinkReturnToLand, 30000);
 
     // Setup periodic pings to the DSP (move this somewhere else later)
     setInterval(function () {
@@ -43,6 +43,9 @@ function main() {
                         console.log(error)
                     } else {
                         console.log(body.noFlyZones);
+                        if (body.noFlyZones.length > 0){
+                            gcs.mavlinkReturnToLand();
+                        }
                     }
                 }
             );
