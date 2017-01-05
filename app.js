@@ -41,6 +41,8 @@ function main() {
                 function (error, response, body) {
                     if (error) {
                         console.log(error)
+                    } else {
+                        console.log(response.noFlyZones);
                     }
                 }
             );
