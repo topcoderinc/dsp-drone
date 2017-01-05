@@ -21,6 +21,8 @@ gcs.setup({device: serialDevice, baudRate: 57600})
 });
 
 function main() {
+    // Test RTL after 30 seconds
+    setTimeout(gcs.mavlinkReturnToLand, 30000);
 
     // Setup periodic pings to the DSP (move this somewhere else later)
     setInterval(function () {
@@ -29,7 +31,7 @@ function main() {
             var lat = telemetry.lat / Math.pow(10, 7);
             var lon = telemetry.lon / Math.pow(10, 7);
             request.put(
-                'https://kb-dsp-server-dev.herokuapp.com/api/v1/drones/' + process.env.droneId_mongo,
+                process.env.DSP_BACKEND + '/drones/' + process.env.DRONEID_MONGO,
                 {
                     json: {
                         lat: lat,

@@ -249,6 +249,41 @@ function _mavlinkSendArm(mavlinkTransmit, mavlinkReceive, serial, enable){
     })
 }
 
+function mavlinkReturnToLand(){
+    _mavlinkReturnToLand(mavlinkTransmit, serial1);
+}
+
+function _mavlinkReturnToLand(mavlinkTransmit, serial){
+    return new Promise(function (resolve, reject) {
+        let timeout = setTimeout(function () { // Return an error if I don't get an ACK after a while
+            resolve('Error: RTL failed');
+        }, 5000);
+        mavlinkReceive.mavlink.once('COMMAND_ACK', function (message, fields) { // Prepare a one time listener for the count
+            if (fields.result == 0) {
+                clearTimeout(timeout);
+                resolve(fields);
+            } else {
+                reject(fields);
+            }
+        });
+        mavlinkTransmit.mavlink.createMessage('COMMAND_LONG', {
+            'target_system': 1, // System which should execute the command
+            'target_component': 1, // Component which should execute the command
+            'command': 20, // Command ID, as defined by MAV_CMD enum
+            'confirmation': 0, // 0: First transmission of this command. 1-255: Confirmation transmissions (e.g. for kill command)
+            'param1': 0, // Empty
+            'param2': 0, // Empty
+            'param3': 0, // Empty
+            'param4': 0, // Empty
+            'param5': 0, // Empty
+            'param6': 0, // Empty
+            'param7': 0 // Empty
+        }, function (message) {
+            serial.port.write(message.buffer);
+        });
+    })
+}
+
 function mavlinkSendCameraTrigger(){
     return _mavlinkSendCameraTrigger(mavlinkTransmit, serial1);
 }
@@ -488,6 +523,7 @@ module.exports = {
     mavlinkOverrideRcChannel: mavlinkOverrideRcChannel,
     mavlinkSetMode: mavlinkSetMode,
     mavlinkSendCameraTrigger: mavlinkSendCameraTrigger,
+    mavlinkReturnToLand: mavlinkReturnToLand,
     MAV_DATA_STREAM_ALL: MAV_DATA_STREAM_ALL,
     MAV_DATA_STREAM_RAW_SENSORS: MAV_DATA_STREAM_RAW_SENSORS,
     MAV_DATA_STREAM_EXTENDED_STATUS: MAV_DATA_STREAM_EXTENDED_STATUS,
