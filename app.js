@@ -119,9 +119,8 @@ function main() {
     });
 
     app.post('/api/v1/command/mode', function (req, res) {
-        gcs.mavlinkSetMode(req.body.mode);
+        gcs.mavlinkSetMode(gcs[req.body.mode]);
         res.json({result: 'success'});
-
     });
 
     app.post('/api/v1/camera/trigger', function (req, res) {
