@@ -367,6 +367,7 @@ function _mavlinkSetMode(mavlinkTransmit, serial, mode){
         target_system: 1,
         base_mode: mode
         }, function (message) {
+        console.log('Setting mode to: ' + mode);
             serial.port.write(message.buffer);
         });
 }
