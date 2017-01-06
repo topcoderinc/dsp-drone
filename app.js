@@ -40,7 +40,7 @@ function main() {
                         console.log(error)
                     } else {
                         console.log(body.noFlyZones);
-                        if (body.noFlyZones.length != undefined) {
+                        if (body.noFlyZones != undefined) {
                             if (body.noFlyZones.length > 0){
                                 gcs.mavlinkReturnToLand();
                                 gcs.mavlinkSetMode(gcs.POSHOLD);
