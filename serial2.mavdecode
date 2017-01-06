@@ -1,0 +1,454 @@
+----- [13:56:39.241] /dev/tty.SLAB_USBtoUART8 [VFR_HUD ID#74][seq:137][sys:1][com:1] -----
+{
+  "airspeed": 0.13928388059139252,
+  "groundspeed": 0.13928388059139252,
+  "alt": -0.429999977350235,
+  "climb": 0.429999977350235,
+  "heading": 283,
+  "throttle": 0
+}
+
+----- [13:56:39.260] /dev/tty.SLAB_USBtoUART8 [ATTITUDE ID#30][seq:138][sys:1][com:1] -----
+{
+  "time_boot_ms": 7219950,
+  "roll": 0.004370862618088722,
+  "pitch": 0.015790849924087524,
+  "yaw": -1.3307862281799316,
+  "rollspeed": 0.0066633098758757114,
+  "pitchspeed": 0.0060956114903092384,
+  "yawspeed": 0.0016480623744428158
+}
+
+----- [13:56:39.475] /dev/tty.SLAB_USBtoUART8 [VFR_HUD ID#74][seq:141][sys:1][com:1] -----
+{
+  "airspeed": 0.041231054812669754,
+  "groundspeed": 0.041231054812669754,
+  "alt": -0.429999977350235,
+  "climb": 0.429999977350235,
+  "heading": 283,
+  "throttle": 0
+}
+
+----- [13:56:39.485] /dev/tty.SLAB_USBtoUART8 [RAW_IMU ID#27][seq:142][sys:1][com:1] -----
+{
+  "time_usec": -1369963709,
+  "xacc": -14,
+  "yacc": -22,
+  "zacc": -1109,
+  "xgyro": 6,
+  "ygyro": 5,
+  "zgyro": 1,
+  "xmag": 80,
+  "ymag": 247,
+  "zmag": 610
+}
+
+----- [13:56:39.525] /dev/tty.SLAB_USBtoUART8 [SCALED_PRESSURE ID#29][seq:144][sys:1][com:1] -----
+{"time_boot_ms": 7219970, "press_abs": 998.276611328125, "press_diff": 0.15664061903953552, "temperature": 4995}
+
+----- [13:56:39.539] /dev/tty.SLAB_USBtoUART8 [SYS_STATUS ID#1][seq:145][sys:1][com:1] -----
+{
+  "onboard_control_sensors_present": 23198767,
+  "onboard_control_sensors_enabled": 6421551,
+  "onboard_control_sensors_health": 23198767,
+  "load": 310,
+  "voltage_battery": 11955,
+  "current_battery": 2,
+  "drop_rate_comm": 0,
+  "errors_comm": 0,
+  "errors_count1": 0,
+  "errors_count2": 0,
+  "errors_count3": 0,
+  "errors_count4": 0,
+  "battery_remaining": 99
+}
+
+----- [13:56:39.551] /dev/tty.SLAB_USBtoUART8 [MISSION_CURRENT ID#42][seq:148][sys:1][com:1] -----
+{"seq": 1}
+
+----- [13:56:39.560] /dev/tty.SLAB_USBtoUART8 [GPS_RAW_INT ID#24][seq:149][sys:1][com:1] -----
+{
+  "time_usec": -1370024591,
+  "lat": 421428043,
+  "lon": -880196217,
+  "alt": 219450,
+  "eph": 63,
+  "epv": 92,
+  "vel": 4,
+  "cog": 10403,
+  "fix_type": 4,
+  "satellites_visible": 19
+}
+
+----- [13:56:39.570] /dev/tty.SLAB_USBtoUART8 [NAV_CONTROLLER_OUTPUT ID#62][seq:150][sys:1][com:1] -----
+{
+  "nav_roll": 0.2507043182849884,
+  "nav_pitch": 0.9047333598136902,
+  "alt_error": 0,
+  "aspd_error": 0,
+  "xtrack_error": 0,
+  "nav_bearing": -76,
+  "target_bearing": 0,
+  "wp_dist": 0
+}
+
+----- [13:56:39.581] /dev/tty.SLAB_USBtoUART8 [RC_CHANNELS_RAW ID#35][seq:153][sys:1][com:1] -----
+{
+  "time_boot_ms": 7219971,
+  "chan1_raw": 992,
+  "chan2_raw": 1503,
+  "chan3_raw": 1506,
+  "chan4_raw": 1504,
+  "chan5_raw": 1407,
+  "chan6_raw": 1507,
+  "chan7_raw": 992,
+  "chan8_raw": 991,
+  "port": 0,
+  "rssi": 0
+}
+
+----- [13:56:39.827] /dev/tty.SLAB_USBtoUART8 [SYSTEM_TIME ID#2][seq:157][sys:1][com:1] -----
+{"time_unix_usec": 1790284890, "time_boot_ms": 7219971}
+
+----- [13:56:39.895] /dev/tty.SLAB_USBtoUART8 [GLOBAL_POSITION_INT ID#33][seq:162][sys:1][com:1] -----
+{
+  "time_boot_ms": 7220110,
+  "lat": 421428030,
+  "lon": -880196216,
+  "alt": 219540,
+  "relative_alt": -430,
+  "vx": 0,
+  "vy": 1,
+  "vz": 43,
+  "hdg": 28376
+}
+
+----- [13:56:39.913] /dev/tty.SLAB_USBtoUART8 [LOCAL_POSITION_NED ID#32][seq:163][sys:1][com:1] -----
+{
+  "time_boot_ms": 7220150,
+  "x": -5.847101211547852,
+  "y": 3.371203660964966,
+  "z": 0.11970043182373047,
+  "vx": -0.004409622400999069,
+  "vy": 0.014508934691548347,
+  "vz": -0.4341719448566437
+}
+
+----- [13:56:39.919] /dev/tty.SLAB_USBtoUART8 [ATTITUDE ID#30][seq:164][sys:1][com:1] -----
+{
+  "time_boot_ms": 7220150,
+  "roll": 0.004457475617527962,
+  "pitch": 0.015932150185108185,
+  "yaw": -1.3307793140411377,
+  "rollspeed": 0.006554738152772188,
+  "pitchspeed": 0.005636526271700859,
+  "yawspeed": 0.0023802099749445915
+}
+
+----- [13:56:39.982] /dev/tty.SLAB_USBtoUART8 [VFR_HUD ID#74][seq:167][sys:1][com:1] -----
+{
+  "airspeed": 0.11704699695110321,
+  "groundspeed": 0.11704699695110321,
+  "alt": -0.429999977350235,
+  "climb": 0.429999977350235,
+  "heading": 283,
+  "throttle": 0
+}
+
+----- [13:56:40.4] /dev/tty.SLAB_USBtoUART8 [HEARTBEAT ID#0][seq:168][sys:1][com:1] -----
+{"custom_mode": 16, "type": 2, "autopilot": 3, "base_mode": 89, "system_status": 3, "mavlink_version": 3}
+
+----- [13:56:40.12] /dev/tty.SLAB_USBtoUART8 [ATTITUDE ID#30][seq:169][sys:1][com:1] -----
+{
+  "time_boot_ms": 7220351,
+  "roll": 0.004512162879109383,
+  "pitch": 0.015866266563534737,
+  "yaw": -1.3307750225067139,
+  "rollspeed": 0.0073465812020003796,
+  "pitchspeed": 0.005593922920525074,
+  "yawspeed": 0.0014729270478710532
+}
+
+----- [13:56:40.48] /dev/tty.SLAB_USBtoUART8 [VFR_HUD ID#74][seq:172][sys:1][com:1] -----
+{
+  "airspeed": 0.07280109822750092,
+  "groundspeed": 0.07280109822750092,
+  "alt": -0.4399999976158142,
+  "climb": 0.429999977350235,
+  "heading": 283,
+  "throttle": 0
+}
+
+----- [13:56:40.101] /dev/tty.SLAB_USBtoUART8 [ATTITUDE ID#30][seq:173][sys:1][com:1] -----
+{
+  "time_boot_ms": 7220551,
+  "roll": 0.004606902599334717,
+  "pitch": 0.015730036422610283,
+  "yaw": -1.3307543992996216,
+  "rollspeed": 0.006661332678049803,
+  "pitchspeed": 0.0056910086423158646,
+  "yawspeed": 0.0021633084397763014
+}
+
+----- [13:56:40.126] /dev/tty.SLAB_USBtoUART8 [VFR_HUD ID#74][seq:176][sys:1][com:1] -----
+{
+  "airspeed": 0.11999999731779099,
+  "groundspeed": 0.11999999731779099,
+  "alt": -0.4399999976158142,
+  "climb": 0.429999977350235,
+  "heading": 283,
+  "throttle": 0
+}
+
+----- [13:56:40.137] /dev/tty.SLAB_USBtoUART8 [RAW_IMU ID#27][seq:177][sys:1][com:1] -----
+{
+  "time_usec": -1369363289,
+  "xacc": -14,
+  "yacc": -23,
+  "zacc": -1110,
+  "xgyro": 6,
+  "ygyro": 5,
+  "zgyro": 2,
+  "xmag": 79,
+  "ymag": 252,
+  "zmag": 606
+}
+
+----- [13:56:40.169] /dev/tty.SLAB_USBtoUART8 [SCALED_PRESSURE ID#29][seq:179][sys:1][com:1] -----
+{"time_boot_ms": 7220571, "press_abs": 998.2642211914062, "press_diff": 0.14421874284744263, "temperature": 4995}
+
+----- [13:56:40.182] /dev/tty.SLAB_USBtoUART8 [SYS_STATUS ID#1][seq:180][sys:1][com:1] -----
+{
+  "onboard_control_sensors_present": 23198767,
+  "onboard_control_sensors_enabled": 6421551,
+  "onboard_control_sensors_health": 23198767,
+  "load": 336,
+  "voltage_battery": 11932,
+  "current_battery": 0,
+  "drop_rate_comm": 0,
+  "errors_comm": 0,
+  "errors_count1": 0,
+  "errors_count2": 0,
+  "errors_count3": 0,
+  "errors_count4": 0,
+  "battery_remaining": 99
+}
+
+----- [13:56:40.215] /dev/tty.SLAB_USBtoUART8 [MISSION_CURRENT ID#42][seq:183][sys:1][com:1] -----
+{"seq": 1}
+
+----- [13:56:40.226] /dev/tty.SLAB_USBtoUART8 [GPS_RAW_INT ID#24][seq:184][sys:1][com:1] -----
+{
+  "time_usec": -1369443591,
+  "lat": 421428048,
+  "lon": -880196220,
+  "alt": 219540,
+  "eph": 63,
+  "epv": 92,
+  "vel": 12,
+  "cog": 18000,
+  "fix_type": 4,
+  "satellites_visible": 19
+}
+
+----- [13:56:40.234] /dev/tty.SLAB_USBtoUART8 [NAV_CONTROLLER_OUTPUT ID#62][seq:185][sys:1][com:1] -----
+{
+  "nav_roll": 0.2632589340209961,
+  "nav_pitch": 0.9010912179946899,
+  "alt_error": 0,
+  "aspd_error": 0,
+  "xtrack_error": 0,
+  "nav_bearing": -76,
+  "target_bearing": 0,
+  "wp_dist": 0
+}
+
+----- [13:56:40.245] /dev/tty.SLAB_USBtoUART8 [GLOBAL_POSITION_INT ID#33][seq:187][sys:1][com:1] -----
+{
+  "time_boot_ms": 7220491,
+  "lat": 421428033,
+  "lon": -880196217,
+  "alt": 219530,
+  "relative_alt": -440,
+  "vx": 0,
+  "vy": 0,
+  "vz": 43,
+  "hdg": 28376
+}
+
+----- [13:56:40.252] /dev/tty.SLAB_USBtoUART8 [LOCAL_POSITION_NED ID#32][seq:188][sys:1][com:1] -----
+{
+  "time_boot_ms": 7220571,
+  "x": -5.811817646026611,
+  "y": 3.3636205196380615,
+  "z": 0.12307418137788773,
+  "vx": 0.005399221554398537,
+  "vy": 0.008634944446384907,
+  "vz": -0.43176019191741943
+}
+
+----- [13:56:40.282] /dev/tty.SLAB_USBtoUART8 [RC_CHANNELS_RAW ID#35][seq:190][sys:1][com:1] -----
+{
+  "time_boot_ms": 7220571,
+  "chan1_raw": 991,
+  "chan2_raw": 1504,
+  "chan3_raw": 1505,
+  "chan4_raw": 1504,
+  "chan5_raw": 1408,
+  "chan6_raw": 1507,
+  "chan7_raw": 992,
+  "chan8_raw": 991,
+  "port": 0,
+  "rssi": 0
+}
+
+----- [13:56:40.508] /dev/tty.SLAB_USBtoUART8 [SYSTEM_TIME ID#2][seq:194][sys:1][com:1] -----
+{"time_unix_usec": 1790883890, "time_boot_ms": 7220571}
+
+----- [13:56:40.677] /dev/tty.SLAB_USBtoUART8 [ATTITUDE ID#30][seq:199][sys:1][com:1] -----
+{
+  "time_boot_ms": 7220751,
+  "roll": 0.004599103704094887,
+  "pitch": 0.01566571369767189,
+  "yaw": -1.330754041671753,
+  "rollspeed": 0.006989095825701952,
+  "pitchspeed": 0.0060503436252474785,
+  "yawspeed": 0.0014541485579684377
+}
+
+----- [13:56:40.703] /dev/tty.SLAB_USBtoUART8 [VFR_HUD ID#74][seq:202][sys:1][com:1] -----
+{
+  "airspeed": 0.08062257617712021,
+  "groundspeed": 0.08062257617712021,
+  "alt": -0.4399999976158142,
+  "climb": 0.429999977350235,
+  "heading": 283,
+  "throttle": 0
+}
+
+----- [13:56:40.713] /dev/tty.SLAB_USBtoUART8 [ATTITUDE ID#30][seq:203][sys:1][com:1] -----
+{
+  "time_boot_ms": 7220951,
+  "roll": 0.004613863304257393,
+  "pitch": 0.015591541305184364,
+  "yaw": -1.3307311534881592,
+  "rollspeed": 0.007475495804101229,
+  "pitchspeed": 0.005696548148989677,
+  "yawspeed": 0.001418735133484006
+}
+
+----- [13:56:40.739] /dev/tty.SLAB_USBtoUART8 [VFR_HUD ID#74][seq:206][sys:1][com:1] -----
+{
+  "airspeed": 0.10770329087972641,
+  "groundspeed": 0.10770329087972641,
+  "alt": -0.4399999976158142,
+  "climb": 0.429999977350235,
+  "heading": 283,
+  "throttle": 0
+}
+
+----- [13:56:40.788] /dev/tty.SLAB_USBtoUART8 [GLOBAL_POSITION_INT ID#33][seq:207][sys:1][com:1] -----
+{
+  "time_boot_ms": 7220891,
+  "lat": 421428036,
+  "lon": -880196217,
+  "alt": 219530,
+  "relative_alt": -440,
+  "vx": 1,
+  "vy": 0,
+  "vz": 43,
+  "hdg": 28376
+}
+
+----- [13:56:40.800] /dev/tty.SLAB_USBtoUART8 [LOCAL_POSITION_NED ID#32][seq:208][sys:1][com:1] -----
+{
+  "time_boot_ms": 7220991,
+  "x": -5.78118896484375,
+  "y": 3.3614706993103027,
+  "z": 0.12260720878839493,
+  "vx": 0.012214346788823605,
+  "vy": 0.0066245063208043575,
+  "vz": -0.4304845631122589
+}
+
+----- [13:56:40.813] /dev/tty.SLAB_USBtoUART8 [RAW_IMU ID#27][seq:209][sys:1][com:1] -----
+{
+  "time_usec": -1368763259,
+  "xacc": -14,
+  "yacc": -22,
+  "zacc": -1108,
+  "xgyro": 7,
+  "ygyro": 5,
+  "zgyro": 1,
+  "xmag": 82,
+  "ymag": 248,
+  "zmag": 608
+}
+
+----- [13:56:40.825] /dev/tty.SLAB_USBtoUART8 [SCALED_PRESSURE ID#29][seq:211][sys:1][com:1] -----
+{"time_boot_ms": 7221171, "press_abs": 998.2687377929688, "press_diff": 0.14874999225139618, "temperature": 4995}
+
+----- [13:56:40.836] /dev/tty.SLAB_USBtoUART8 [SYS_STATUS ID#1][seq:212][sys:1][com:1] -----
+{
+  "onboard_control_sensors_present": 23198767,
+  "onboard_control_sensors_enabled": 6421551,
+  "onboard_control_sensors_health": 23198767,
+  "load": 322,
+  "voltage_battery": 11937,
+  "current_battery": 0,
+  "drop_rate_comm": 0,
+  "errors_comm": 0,
+  "errors_count1": 0,
+  "errors_count2": 0,
+  "errors_count3": 0,
+  "errors_count4": 0,
+  "battery_remaining": 99
+}
+
+----- [13:56:40.851] /dev/tty.SLAB_USBtoUART8 [MISSION_CURRENT ID#42][seq:215][sys:1][com:1] -----
+{"seq": 1}
+
+----- [13:56:40.864] /dev/tty.SLAB_USBtoUART8 [GPS_RAW_INT ID#24][seq:216][sys:1][com:1] -----
+{
+  "time_usec": -1368843591,
+  "lat": 421428054,
+  "lon": -880196219,
+  "alt": 219600,
+  "eph": 63,
+  "epv": 92,
+  "vel": 11,
+  "cog": 34001,
+  "fix_type": 4,
+  "satellites_visible": 19
+}
+
+----- [13:56:40.975] /dev/tty.SLAB_USBtoUART8 [NAV_CONTROLLER_OUTPUT ID#62][seq:217][sys:1][com:1] -----
+{
+  "nav_roll": 0.27540335059165955,
+  "nav_pitch": 0.8906542658805847,
+  "alt_error": 0,
+  "aspd_error": 0,
+  "xtrack_error": 0,
+  "nav_bearing": -76,
+  "target_bearing": 0,
+  "wp_dist": 0
+}
+
+----- [13:56:41.90] /dev/tty.SLAB_USBtoUART8 [RC_CHANNELS_RAW ID#35][seq:220][sys:1][com:1] -----
+{
+  "time_boot_ms": 7221171,
+  "chan1_raw": 992,
+  "chan2_raw": 1503,
+  "chan3_raw": 1505,
+  "chan4_raw": 1504,
+  "chan5_raw": 1408,
+  "chan6_raw": 1507,
+  "chan7_raw": 991,
+  "chan8_raw": 992,
+  "port": 0,
+  "rssi": 0
+}
+
+----- [13:56:41.128] /dev/tty.SLAB_USBtoUART8 [SYSTEM_TIME ID#2][seq:224][sys:1][com:1] -----
+{"time_unix_usec": 1791483890, "time_boot_ms": 7221171}
+
