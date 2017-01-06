@@ -365,7 +365,7 @@ function _mavlinkSetMode(mavlinkTransmit, serial, mode){
     mavlinkTransmit.mavlink.createMessage('SET_MODE', {
         custom_mode: mode,
         target_system: 1,
-        base_mode: 1
+        base_mode: 1 // Docs say ardupilot ignores this, but it doesn't - it has to be set to 1
         }, function (message) {
             console.log('Setting mode to: ' + mode);
             serial.port.write(message.buffer);
