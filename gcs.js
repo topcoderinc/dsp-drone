@@ -15,24 +15,26 @@ const MAV_DATA_STREAM_EXTRA1 = 10;
 const MAV_DATA_STREAM_EXTRA2 = 11;
 const MAV_DATA_STREAM_EXTRA3 = 12;
 
-const STABILIZE =     0;  // manual airframe angle with manual throttle
-const ACRO =          1;  // manual body-frame angular rate with manual throttle
-const ALT_HOLD =      2;  // manual airframe angle with automatic throttle
-const AUTO =          3;  // fully automatic waypoint control using mission commands
-const GUIDED =        4;  // fully automatic fly to coordinate or fly at velocity/direction using GCS immediate commands
-const LOITER =        5;  // automatic horizontal acceleration with automatic throttle
-const RTL =           6;  // automatic return to launching point
-const CIRCLE =        7;  // automatic circular flight with automatic throttle
-const LAND =          9;  // automatic landing with horizontal position control
-const DRIFT =        11;  // semi-automous position, yaw and throttle control
-const SPORT =        13;  // manual earth-frame angular rate control with manual throttle
-const FLIP =         14;  // automatically flip the vehicle on the roll axis
-const AUTOTUNE =     15;  // automatically tune the vehicle's roll and pitch gains
-const POSHOLD =      16;  // automatic position hold with manual override, with automatic throttle
-const BRAKE =        17;  // full-brake using inertial/GPS system, no pilot input
-const THROW =        18;  // throw to launch mode using inertial/GPS system, no pilot input
-const AVOID_ADSB =   19;  // automatic avoidance of obstacles in the macro scale - e.g. full-sized aircraft
-const GUIDED_NOGPS = 20;
+const FLIGHT_MODES = {
+    STABILIZE:     0,  // manual airframe angle with manual throttle
+    ACRO:          1,  // manual body-frame angular rate with manual throttle
+    ALT_HOLD:      2,  // manual airframe angle with automatic throttle
+    AUTO:          3,  // fully automatic waypoint control using mission commands
+    GUIDED:        4,  // fully automatic fly to coordinate or fly at velocity/direction using GCS immediate commands
+    LOITER:        5,  // automatic horizontal acceleration with automatic throttle
+    RTL:           6,  // automatic return to launching point
+    CIRCLE:        7,  // automatic circular flight with automatic throttle
+    LAND:          9,  // automatic landing with horizontal position control
+    DRIFT:        11,  // semi-automous position, yaw and throttle control
+    SPORT:        13,  // manual earth-frame angular rate control with manual throttle
+    FLIP:         14,  // automatically flip the vehicle on the roll axis
+    AUTOTUNE:     15,  // automatically tune the vehicle's roll and pitch gains
+    POSHOLD:      16,  // automatic position hold with manual override, with automatic throttle
+    BRAKE:        17,  // full-brake using inertial/GPS system, no pilot input
+    THROW:        18,  // throw to launch mode using inertial/GPS system, no pilot input
+    AVOID_ADSB:   19,  // automatic avoidance of obstacles in the macro scale - e.g. full-sized aircraft
+    GUIDED_NOGPS: 20
+};
 
 
 let mavDataStreams = {
@@ -554,24 +556,7 @@ module.exports = {
     MAV_DATA_STREAM_EXTRA1: MAV_DATA_STREAM_EXTRA1,
     MAV_DATA_STREAM_EXTRA2: MAV_DATA_STREAM_EXTRA2,
     MAV_DATA_STREAM_EXTRA3: MAV_DATA_STREAM_EXTRA3,
-    STABILIZE: STABILIZE,
-    ACRO: ACRO,
-    ALT_HOLD: ALT_HOLD,
-    AUTO: AUTO,
-    GUIDED: GUIDED,
-    LOITER: LOITER,
-    RTL: RTL,
-    CIRCLE: CIRCLE,
-    LAND: LAND,
-    DRIFT: DRIFT,
-    SPORT: SPORT,
-    FLIP: FLIP,
-    AUTOTUNE: AUTOTUNE,
-    POSHOLD: POSHOLD,
-    BRAKE: BRAKE,
-    THROW: THROW,
-    AVOID_ADSB: AVOID_ADSB,
-    GUIDED_NOGPS: GUIDED_NOGPS
+    FLIGHT_MODES: FLIGHT_MODES
 };
 
 let missionT = [

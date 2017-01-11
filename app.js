@@ -43,7 +43,7 @@ function main() {
                         if (body.noFlyZones != undefined) {
                             if (body.noFlyZones.length > 0){
                                 gcs.mavlinkReturnToLand();
-                                gcs.mavlinkSetMode(gcs.POSHOLD);
+                                // gcs.mavlinkSetMode(gcs.FLIGHT_MODES.POSHOLD);
                             }
                         }
 
