@@ -28,7 +28,7 @@ function main() {
             var lat = telemetry.lat / Math.pow(10, 7);
             var lon = telemetry.lon / Math.pow(10, 7);
             request.put(
-                process.env.DSP_BACKEND + '/drones/' + process.env.DRONEID_MONGO + '?returnNFZ=true&returnNearestDrones=true',
+                process.env.DSP_BACKEND + '/drones/position/' + process.env.DRONE_SERIAL + '?returnNFZ=true&nearDronesMaxDist=80000',
                 {
                     json: {
                         lat: lat,
